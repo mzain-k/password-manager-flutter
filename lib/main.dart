@@ -7,6 +7,7 @@ import 'screens/splash_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/add_password_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // must be first line
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         '/login':  (ctx) => const LoginScreen(),
         '/signup': (ctx) => const SignupScreen(),
         '/home':   (ctx) => const HomeScreen(),
+        '/add':    (ctx) => const AddPasswordScreen(),
       },
     );
   }
