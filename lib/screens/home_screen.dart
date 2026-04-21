@@ -41,6 +41,11 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           // Settings / logout icon
           IconButton(
+            icon: const Icon(Icons.casino_outlined),
+            tooltip: 'Password Generator',
+            onPressed: () => Navigator.pushNamed(context, '/generator'),
+          ),
+          IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () => _showOptionsMenu(context),
           ),

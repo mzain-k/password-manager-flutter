@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-// Import all screens
+// Importing all screens
 import 'screens/splash_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/add_password_screen.dart';
-
+import 'screens/generator_screeen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // must be first line
   await Firebase.initializeApp(
@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
         '/signup': (ctx) => const SignupScreen(),
         '/home':   (ctx) => const HomeScreen(),
         '/add':    (ctx) => const AddPasswordScreen(),
+        '/generator': (ctx) => const GeneratorScreen(),
       },
     );
   }
