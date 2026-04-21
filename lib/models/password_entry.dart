@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PasswordEntry {
   final String id;                  // Firestore document ID (auto-generated)
-  final String siteName;            // e.g. "Google", "Facebook"
-  final String siteUrl;             // e.g. "https://google.com" (optional)
-  final String username;            // the email or username for this account
+  final String siteName;
+  final String siteUrl;
+  final String username;
   final String encryptedPassword;   // AES encrypted — NEVER plain text
-  final String strength;            // "Very Weak" | "Weak" | "Fair" | "Strong" | "Very Strong"
-  final bool   isBreached;          // true if found in HIBP database
-  final int    breachCount;         // how many times found in breaches
-  final String category;            // "Personal" | "Work" | "Banking" | "Social"
+  final String strength;
+  final bool   isBreached;
+  final int    breachCount;
+  final String category;
   final DateTime createdAt;
   final DateTime updatedAt;
 

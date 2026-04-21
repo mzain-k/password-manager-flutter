@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../services/firestore_service.dart';
 import '../services/encryption_service.dart';
 import '../models/password_entry.dart';
+import '../widgets/strength_meter.dart';
+import '../utils/password_strength.dart';
 
 class AddPasswordScreen extends StatefulWidget {
   const AddPasswordScreen({super.key});
@@ -19,6 +21,8 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
   bool    _isLoading    = false;
   bool    _showPassword = false;
   String  _category     = 'Personal';
+
+  String _currentPassword = '';
 
   final List<String> _categories =
       ['Personal', 'Work', 'Banking', 'Social', 'Shopping', 'Other'];
@@ -43,6 +47,7 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
       // Step 2: encrypt the plain text password
       // This is the ONLY place the plain text password exists in memory
       final encrypted = EncryptionService.encrypt(_passCtrl.text);
+      final strengthResult = analyzePassword(_passCtrl.text);
 
       // Step 3: build the PasswordEntry object
       final entry = PasswordEntry(
@@ -51,7 +56,7 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
         siteUrl:           _urlCtrl.text.trim(),
         username:          _userCtrl.text.trim(),
         encryptedPassword: encrypted,    // store ONLY the encrypted version
-        strength:          'Unknown',    // strength checker added on Day 6
+        strength:          strengthResult.label, // strength checker added on Day 6
         isBreached:        false,        // breach check added on Day 8
         category:          _category,
         createdAt:         DateTime.now(),
@@ -131,8 +136,9 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
                   'Site / App Name', Icons.language,
                   hint: 'e.g. Google, Facebook'),
                 validator: (v) {
-                  if (v == null || v.trim().isEmpty)
+                  if (v == null || v.trim().isEmpty){
                     return 'Site name is required';
+                  }
                   return null;
                 },
               ),
@@ -154,10 +160,11 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: _inputDeco(
                   'Username or Email', Icons.person_outline,
-                  hint: 'e.g. ahmed@gmail.com'),
+                  hint: 'e.g. zain@gmail.com'),
                 validator: (v) {
-                  if (v == null || v.trim().isEmpty)
+                  if (v == null || v.trim().isEmpty){
                     return 'Username or email is required';
+                  }
                   return null;
                 },
               ),
@@ -167,6 +174,7 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
               TextFormField(
                 controller: _passCtrl,
                 obscureText: !_showPassword,
+                onChanged: (val) => setState(() => _currentPassword = val),
                 decoration: InputDecoration(
                   labelText: 'Password',
                   prefixIcon: const Icon(
@@ -191,18 +199,24 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
                   fillColor: Colors.grey.shade50,
                 ),
                 validator: (v) {
-                  if (v == null || v.isEmpty)
+                  if (v == null || v.isEmpty) {
                     return 'Password is required';
-                  if (v.length < 4)
+                  }
+                  if (v.length < 4) {
                     return 'Password must be at least 4 characters';
+                  }
                   return null;
                 },
               ),
+              const SizedBox(height: 12),
+
+              StrengthMeter(password: _currentPassword),
+
               const SizedBox(height: 16),
 
               // ── Category dropdown ─────────────────────────────────────
               DropdownButtonFormField<String>(
-                value: _category,
+                initialValue: _category,
                 decoration: _inputDeco('Category', Icons.folder_outlined),
                 items: _categories.map((cat) {
                   return DropdownMenuItem(
