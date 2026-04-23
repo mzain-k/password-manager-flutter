@@ -4,6 +4,7 @@ import '../services/encryption_service.dart';
 import '../models/password_entry.dart';
 import '../widgets/strength_meter.dart';
 import '../utils/password_strength.dart';
+import '../services/breach_service.dart';
 
 class AddPasswordScreen extends StatefulWidget {
   const AddPasswordScreen({super.key});
@@ -22,10 +23,13 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
   bool    _showPassword = false;
   String  _category     = 'Personal';
 
+  BreachResult? _breachResult;
+  bool _isCheckingBreach = false;
+
   String _currentPassword = '';
 
   final List<String> _categories =
-      ['Personal', 'Work', 'Banking', 'Social', 'Shopping', 'Other'];
+      ['Personal', 'Work', 'Study', 'Banking', 'Social', 'Shopping', 'Other'];
 
   @override
   void dispose() {
@@ -36,7 +40,7 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
     super.dispose();
   }
 
-  // ─── Core save logic ─────────────────────────────────────────────────
+  // ─── Core save logic 
   Future<void> _handleSave() async {
     // Step 1: validate all form fields
     if (!_formKey.currentState!.validate()) return;
@@ -52,15 +56,16 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
       // Step 3: build the PasswordEntry object
       final entry = PasswordEntry(
         id:                '',           // Firestore assigns this
-        siteName:          _siteCtrl.text.trim(),
-        siteUrl:           _urlCtrl.text.trim(),
-        username:          _userCtrl.text.trim(),
+        siteName: _siteCtrl.text.trim(),
+        siteUrl: _urlCtrl.text.trim(),
+        username: _userCtrl.text.trim(),
         encryptedPassword: encrypted,    // store ONLY the encrypted version
-        strength:          strengthResult.label, // strength checker added on Day 6
-        isBreached:        false,        // breach check added on Day 8
-        category:          _category,
-        createdAt:         DateTime.now(),
-        updatedAt:         DateTime.now(),
+        strength: strengthResult.label, // strength checker added on Day 6
+        isBreached: _breachResult?.isBreached ?? false,  
+      breachCount: _breachResult?.breachCount ?? 0,      // breach check added on Day 8
+        category: _category,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       );
 
       // Step 4: save to Firestore
@@ -91,7 +96,19 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
     }
   }
 
-  // ─── Reusable input decoration ───────────────────────────────────────
+  Future<void> _checkBreach() async {
+  if (_passCtrl.text.isEmpty) return;
+  setState(() => _isCheckingBreach = true);
+  final result = await BreachService.checkPassword(_passCtrl.text);
+  if (mounted) {
+    setState(() {
+      _breachResult = result;
+      _isCheckingBreach = false;
+    });
+  }
+}
+
+  // ─── Reusable input decoration 
   InputDecoration _inputDeco(String label, IconData icon, {String? hint}) {
     return InputDecoration(
       labelText: label,
@@ -128,7 +145,7 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
 
-              // ── Site Name ─────────────────────────────────────────────
+              // ── Site Name 
               TextFormField(
                 controller: _siteCtrl,
                 textCapitalization: TextCapitalization.words,
@@ -144,7 +161,7 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
               ),
               const SizedBox(height: 16),
 
-              // ── URL (optional) ────────────────────────────────────────
+              // ── URL (optional) 
               TextFormField(
                 controller: _urlCtrl,
                 keyboardType: TextInputType.url,
@@ -154,7 +171,7 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
               ),
               const SizedBox(height: 16),
 
-              // ── Username / Email ──────────────────────────────────────
+              // ── Username / Email 
               TextFormField(
                 controller: _userCtrl,
                 keyboardType: TextInputType.emailAddress,
@@ -170,7 +187,7 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
               ),
               const SizedBox(height: 16),
 
-              // ── Password field with show/hide toggle ──────────────────
+              // ── Password field with show/hide toggle 
               TextFormField(
                 controller: _passCtrl,
                 obscureText: !_showPassword,
@@ -212,9 +229,71 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
 
               StrengthMeter(password: _currentPassword),
 
+              const SizedBox(height: 12),
+
+              // The check button — shows spinner while checking
+              OutlinedButton.icon(
+                onPressed: _isCheckingBreach ? null : _checkBreach,
+                icon: _isCheckingBreach
+                  ? const SizedBox(
+                      width: 16, height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2))
+                  : const Icon(Icons.security_outlined, size: 18),
+                label: Text(_isCheckingBreach
+                  ? 'Checking...'
+                  : 'Check for Data Breaches'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: const Color(0xFF1E3A5F),
+                  side: const BorderSide(color: Color(0xFF1E3A5F)),
+                ),
+              ),
+
+              // Result — shown only after a check
+              if (_breachResult != null) ...[
+                const SizedBox(height: 10),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: _breachResult!.isBreached
+                        ? const Color(0xFFFDEDEC)
+                        : const Color(0xFFEAF5EA),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: _breachResult!.isBreached
+                          ? const Color(0xFFF1948A)
+                          : const Color(0xFF81C784)),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        _breachResult!.isBreached
+                            ? Icons.warning_amber_rounded
+                            : Icons.check_circle_outline,
+                        color: _breachResult!.isBreached
+                            ? const Color(0xFFC0392B)
+                            : const Color(0xFF2E7D32),
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          _breachResult!.message,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: _breachResult!.isBreached
+                                ? const Color(0xFF922B21)
+                                : const Color(0xFF1B5E20),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+
               const SizedBox(height: 16),
 
-              // ── Category dropdown ─────────────────────────────────────
+              // ── Category dropdown 
               DropdownButtonFormField<String>(
                 initialValue: _category,
                 decoration: _inputDeco('Category', Icons.folder_outlined),
@@ -230,7 +309,7 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
               ),
               const SizedBox(height: 8),
 
-              // ── Encryption notice ─────────────────────────────────────
+              // ── Encryption notice 
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -254,7 +333,7 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
               ),
               const SizedBox(height: 24),
 
-              // ── Save button ───────────────────────────────────────────
+              // ── Save button 
               ElevatedButton(
                 onPressed: _isLoading ? null : _handleSave,
                 style: ElevatedButton.styleFrom(

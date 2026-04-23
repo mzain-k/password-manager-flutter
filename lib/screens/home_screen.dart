@@ -46,6 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () => Navigator.pushNamed(context, '/generator'),
           ),
           IconButton(
+            icon: const Icon(Icons.gpp_maybe_outlined),
+            tooltip: 'Breach Check',
+            onPressed: () =>
+              Navigator.pushNamed(context, '/breach'),
+          ),
+          IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () => _showOptionsMenu(context),
           ),
