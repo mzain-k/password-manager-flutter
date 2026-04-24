@@ -41,6 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           // Settings / logout icon
           IconButton(
+            onPressed: () => Navigator.pushNamed(context, '/dashboard'),
+            tooltip: 'Dashboard',
+            icon: const Icon(Icons.dashboard)),
+          IconButton(
             icon: const Icon(Icons.casino_outlined),
             tooltip: 'Password Generator',
             onPressed: () => Navigator.pushNamed(context, '/generator'),
@@ -58,11 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
 
-      // ── Body ──────────────────────────────────────────────────────────
+      // ── Body 
       body: Column(
         children: [
 
-          // ── Search bar ────────────────────────────────────────────────
+          // ── Search bar 
           Container(
             color: const Color(0xFF1E3A5F),
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -87,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // ── StreamBuilder: live vault list ────────────────────────────
+          // ── StreamBuilder: live vault list 
           Expanded(
             child: StreamBuilder<List<PasswordEntry>>(
               stream: FirestoreService.getPasswordsStream(),
@@ -164,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
 
-                // ── The actual list ───────────────────────────────────
+                // ── The actual list 
                 return Column(
                   children: [
                     // Entry count header
@@ -235,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
 
-      // ── FAB: navigate to Add screen ───────────────────────────────────
+      // ── FAB: navigate to Add screen 
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, '/add'),
         backgroundColor: const Color(0xFF1E3A5F),
@@ -244,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ── Quick preview bottom sheet (tapping a card) ───────────────────────
+  // ── Quick preview bottom sheet (tapping a card) 
   // Temporary until the full detail screen is built on Day 10
   void _showEntryPreview(BuildContext context, PasswordEntry entry) {
     showModalBottomSheet(
@@ -298,7 +302,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ── Options menu (top right) ──────────────────────────────────────────
+  // ── Options menu (top right) 
   void _showOptionsMenu(BuildContext context) {
     showModalBottomSheet(
       context: context,

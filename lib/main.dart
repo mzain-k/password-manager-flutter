@@ -10,7 +10,7 @@ import 'screens/home_screen.dart';
 import 'screens/add_password_screen.dart';
 import 'screens/generator_screeen.dart';
 import 'screens/breach_check_screen.dart';
-
+import 'screens/dashboard_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // must be first line
   await Firebase.initializeApp(
@@ -51,6 +51,7 @@ class MyApp extends StatelessWidget {
         '/add': (ctx) => const AddPasswordScreen(),
         '/generator': (ctx) => const GeneratorScreen(),
         '/breach': (ctx) => const BreachCheckScreen(),
+        '/dashboard': (ctx) => const DashboardScreen(),
       },
     );
   }
