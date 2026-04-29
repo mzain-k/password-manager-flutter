@@ -12,8 +12,7 @@ A secure, feature-complete password manager built with Flutter and Firebase as a
 
 | Field | Details |
 |---|---|
-| **Name** | [YOUR_NAME] |
-| **Registration No.** | [YOUR_REGISTRATION_NUMBER] |
+| **Name** | Muhammad Zain Khan |
 | **Course** | Mobile App Development |
 | **Project** | Secure Password Manager with Breach Detection & Strength Analysis |
 
