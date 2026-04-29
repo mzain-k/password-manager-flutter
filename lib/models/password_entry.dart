@@ -27,10 +27,7 @@ class PasswordEntry {
     required this.updatedAt,
   });
 
-  // ─── toMap ────────────────────────────────────────────────────────────
-  // Converts this Dart object into a plain Map so Firestore can store it.
-  // Note: we do NOT include 'id' here — Firestore manages the document ID
-  // separately. We only store the actual data fields.
+  // ─── toMap 
   Map<String, dynamic> toMap() {
     return {
       'siteName':          siteName,
@@ -46,10 +43,7 @@ class PasswordEntry {
     };
   }
 
-  // ─── fromMap ──────────────────────────────────────────────────────────
-  // Factory constructor: creates a PasswordEntry FROM a Firestore document.
-  // The 'id' comes from doc.id (the Firestore document ID).
-  // The 'map' is doc.data() — the fields stored inside the document.
+  // ─── fromMap .
   factory PasswordEntry.fromMap(String id, Map<String, dynamic> map) {
     return PasswordEntry(
       id:                 id,
@@ -66,10 +60,7 @@ class PasswordEntry {
     );
   }
 
-  // ─── copyWith ─────────────────────────────────────────────────────────
-  // Creates a NEW PasswordEntry that is a copy of this one, but with
-  // specific fields replaced. Used when editing an existing entry.
-  // Any field you don't pass stays the same as the original.
+  // ─── copyWith 
   PasswordEntry copyWith({
     String? siteName,
     String? siteUrl,
@@ -95,9 +86,7 @@ class PasswordEntry {
     );
   }
 
-  // ─── toString ─────────────────────────────────────────────────────────
-  // Useful for debugging — prints a readable summary in the console.
-  // IMPORTANT: never print encryptedPassword in a real app!
+  // ─── toString
   @override
   String toString() {
     return 'PasswordEntry(id: $id, site: $siteName, user: $username, '

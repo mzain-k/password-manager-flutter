@@ -8,15 +8,15 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final _formKey       = GlobalKey<FormState>();
-  final _emailCtrl     = TextEditingController();
-  final _passCtrl      = TextEditingController();
-  final _confirmCtrl   = TextEditingController();
-  final _authService   = AuthService();
+  final _formKey = GlobalKey<FormState>();
+  final _emailCtrl = TextEditingController();
+  final _passCtrl = TextEditingController();
+  final _confirmCtrl = TextEditingController();
+  final _authService = AuthService();
 
-  bool    _isLoading   = false;
-  bool    _showPass    = false;
-  bool    _showConfirm = false;
+  bool _isLoading = false;
+  bool _showPass = false;
+  bool _showConfirm = false;
   String? _errorMessage;
 
   @override
@@ -33,7 +33,7 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() => _isLoading = true);
     try {
       await _authService.signUp(_emailCtrl.text, _passCtrl.text);
-      if (mounted) Navigator.pushReplacementNamed(context, '/home');
+      if (mounted) Navigator.pushReplacementNamed(context, '/scaffold');
     } catch (e) {
       setState(() =>
         _errorMessage = e.toString().replaceAll('Exception: ', ''));

@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
     try {
       await _authService.login(_emailCtrl.text, _passCtrl.text);
-      if (mounted) Navigator.pushReplacementNamed(context, '/home');
+      if (mounted) Navigator.pushReplacementNamed(context, '/scaffold');
     } catch (e) {
       setState(() =>
         _errorMessage = e.toString().replaceAll('Exception: ', ''));

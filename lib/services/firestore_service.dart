@@ -9,21 +9,13 @@ class FirestoreService {
   // Gets the Firestore instance
   static FirebaseFirestore get _db => FirebaseFirestore.instance;
 
-  // Gets the current logged-in user's unique ID
-  // The '!' means we are sure a user is logged in when this is called
   static String get _uid => FirebaseAuth.instance.currentUser!.uid;
 
-  // Builds the reference to THIS user's passwords subcollection
-  // Path: users -> {uid} -> passwords
-  // Every user gets their own isolated subcollection — they cannot see each other's data
   static CollectionReference<Map<String, dynamic>> get _passwordsRef =>
       _db.collection('users').doc(_uid).collection('passwords');
 
 
-  // ─── READ: Stream of all passwords (real-time) ────────────────────────
-  // Returns a Stream — every time Firestore data changes, the UI rebuilds
-  // automatically. No need to manually refresh or call fetch again.
-  // Ordered by createdAt so newest entries appear at the top.
+  // ─── READ: Stream of all passwords (real-time)
   static Stream<List<PasswordEntry>> getPasswordsStream() {
     return _passwordsRef
         .orderBy('createdAt', descending: true)
@@ -40,9 +32,7 @@ class FirestoreService {
   }
 
 
-  // ─── CREATE: Add a new password entry ────────────────────────────────
-  // .add() tells Firestore to create a new document and auto-generate an ID
-  // We pass entry.toMap() which converts the Dart object to a plain Map
+  // ─── CREATE: Add a new password entry
   static Future<void> addPassword(PasswordEntry entry) async {
     try {
       await _passwordsRef.add(entry.toMap());
@@ -52,9 +42,7 @@ class FirestoreService {
   }
 
 
-  // ─── UPDATE: Edit an existing password entry ─────────────────────────
-  // .doc(id) targets the specific document we want to change
-  // .update() only changes the fields we pass — other fields stay the same
+  // ─── UPDATE: Edit an existing password entry 
   static Future<void> updatePassword(String id, PasswordEntry entry) async {
     try {
       await _passwordsRef.doc(id).update(entry.toMap());
@@ -64,7 +52,7 @@ class FirestoreService {
   }
 
 
-  // ─── DELETE: Remove a password entry permanently ──────────────────────
+  // ─── DELETE: Remove a password entry permanently
   static Future<void> deletePassword(String id) async {
     try {
       await _passwordsRef.doc(id).delete();
@@ -74,9 +62,7 @@ class FirestoreService {
   }
 
 
-  // ─── READ ONCE: Get all passwords as a one-time fetch ─────────────────
-  // Unlike getPasswordsStream(), this fetches once and stops.
-  // Useful for the dashboard where you need a snapshot to calculate stats.
+  // ─── READ ONCE: Get all passwords as a one-time fetch
   static Future<List<PasswordEntry>> getPasswordsOnce() async {
     try {
       final snapshot = await _passwordsRef
@@ -91,9 +77,7 @@ class FirestoreService {
   }
 
 
-  // ─── SEARCH: Filter entries by site name or username ──────────────────
-  // Note: Firestore does not support full text search natively.
-  // So we load all entries and filter in Dart (fine for small collections).
+  // ─── SEARCH: Filter entries by site name or username 
   static Future<List<PasswordEntry>> searchPasswords(String query) async {
     final all = await getPasswordsOnce();
     final q = query.toLowerCase();

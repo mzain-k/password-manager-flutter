@@ -40,6 +40,33 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+
+      if (args is String) {
+        setState(() {
+          _passCtrl.text  = args;
+          _currentPassword = args;
+        });
+      } else if (args is PasswordEntry) {
+        setState(() {
+          _siteCtrl.text   = args.siteName;
+          _urlCtrl.text    = args.siteUrl;
+          _userCtrl.text   = args.username;
+          // Decrypt the stored password so we can show it in the field
+          final plain      = EncryptionService.decrypt(
+              args.encryptedPassword);
+          _passCtrl.text   = plain;
+          _currentPassword = plain;
+          _category        = args.category;
+        });
+      }
+    });
+  }
+
   // ─── Core save logic 
   Future<void> _handleSave() async {
     // Step 1: validate all form fields
@@ -48,21 +75,19 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
     setState(() => _isLoading = true);
 
     try {
-      // Step 2: encrypt the plain text password
-      // This is the ONLY place the plain text password exists in memory
       final encrypted = EncryptionService.encrypt(_passCtrl.text);
       final strengthResult = analyzePassword(_passCtrl.text);
 
       // Step 3: build the PasswordEntry object
       final entry = PasswordEntry(
-        id:                '',           // Firestore assigns this
+        id: '',           // Firestore assigns this
         siteName: _siteCtrl.text.trim(),
         siteUrl: _urlCtrl.text.trim(),
         username: _userCtrl.text.trim(),
         encryptedPassword: encrypted,    // store ONLY the encrypted version
         strength: strengthResult.label, // strength checker added on Day 6
         isBreached: _breachResult?.isBreached ?? false,  
-      breachCount: _breachResult?.breachCount ?? 0,      // breach check added on Day 8
+        breachCount: _breachResult?.breachCount ?? 0,      // breach check added on Day 8
         category: _category,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),

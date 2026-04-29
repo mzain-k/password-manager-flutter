@@ -39,22 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         actions: [
-          // Settings / logout icon
-          IconButton(
-            onPressed: () => Navigator.pushNamed(context, '/dashboard'),
-            tooltip: 'Dashboard',
-            icon: const Icon(Icons.dashboard)),
-          IconButton(
-            icon: const Icon(Icons.casino_outlined),
-            tooltip: 'Password Generator',
-            onPressed: () => Navigator.pushNamed(context, '/generator'),
-          ),
-          IconButton(
-            icon: const Icon(Icons.gpp_maybe_outlined),
-            tooltip: 'Breach Check',
-            onPressed: () =>
-              Navigator.pushNamed(context, '/breach'),
-          ),
           IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () => _showOptionsMenu(context),
@@ -224,7 +208,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               // The actual card
                               child: PasswordCard(
                                 entry: entries[i],
-                                onTap: () => _showEntryPreview(context, entries[i]),
+                                onTap: () => Navigator.pushNamed(
+                                  context,
+                                  '/detail',
+                                  arguments: entries[i], // pass the full entry object
+                                ),
                               ),
                             );
                           },
@@ -248,59 +236,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ── Quick preview bottom sheet (tapping a card) 
-  // Temporary until the full detail screen is built on Day 10
-  void _showEntryPreview(BuildContext context, PasswordEntry entry) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
-      builder: (ctx) => Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Handle bar
-            Center(
-              child: Container(
-                width: 40, height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(2)),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(entry.siteName,
-              style: const TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 4),
-            Text(entry.username,
-              style: const TextStyle(color: Colors.grey, fontSize: 14)),
-            const SizedBox(height: 16),
-            const Divider(),
-            const SizedBox(height: 12),
-            Text('Category: ${entry.category}',
-              style: const TextStyle(fontSize: 14)),
-            const SizedBox(height: 6),
-            Text('Strength: ${entry.strength}',
-              style: const TextStyle(fontSize: 14)),
-            const SizedBox(height: 6),
-            Text('Added: ${entry.createdAt.day}/${entry.createdAt.month}/${entry.createdAt.year}',
-              style: const TextStyle(fontSize: 14, color: Colors.grey)),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Close'),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   // ── Options menu (top right) 
   void _showOptionsMenu(BuildContext context) {

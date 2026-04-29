@@ -78,7 +78,7 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
 
-            // ── Generated password display box ──────────────────────────
+            // ── Generated password display box 
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -151,7 +151,7 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
             ),
             const SizedBox(height: 20),
 
-            // ── Strength meter ──────────────────────────────────────────
+            // ── Strength meter 
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -163,7 +163,7 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
             ),
             const SizedBox(height: 20),
 
-            // ── Settings panel ──────────────────────────────────────────
+            // ── Settings panel 
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -277,7 +277,7 @@ class _GeneratorScreenState extends State<GeneratorScreen> {
             ),
             const SizedBox(height: 20),
 
-            // ── Use this password button ────────────────────────────────
+            // ── Use this password button 
             ElevatedButton.icon(
               onPressed: () {
                 // Navigate to Add Password with the generated password pre-filled

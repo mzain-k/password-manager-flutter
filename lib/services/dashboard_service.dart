@@ -5,8 +5,7 @@ import '../services/encryption_service.dart';
 
 class DashboardService {
 
-  // Main method — loads all passwords and computes the full stats
-  // Returns a SecurityStats object ready for the screen to display
+  //loads all passwords and computes the full stats
   static Future<SecurityStats> computeStats() async {
 
     // Load all password entries once (not a stream — we need a snapshot)
@@ -25,7 +24,6 @@ class DashboardService {
     final int total = entries.length;
 
     // ── Count weak passwords 
-    // A password is weak if its saved strength label is Very Weak or Weak
     final int weakCount = entries.where((e) =>
         e.strength == 'Very Weak' || e.strength == 'Weak'
     ).length;
@@ -36,9 +34,6 @@ class DashboardService {
         entries.where((e) => e.isBreached).length;
 
     // ── Detect reused passwords 
-    // Step 1: Decrypt every password and store in a map
-    //   key   = decrypted plain text password
-    //   value = how many entries use that password
     final Map<String, int> passwordFrequency = {};
     for (final entry in entries) {
       // Decrypt the password — happens only in device memory, never sent anywhere
@@ -54,10 +49,6 @@ class DashboardService {
     }
 
     // ── Calculate score 
-    // Start at 100. Deduct proportional penalties for each problem.
-    // Breached passwords get the heaviest penalty (most dangerous).
-    // Weak passwords get medium penalty.
-    // Reused passwords get the lightest penalty.
     double score = 100.0;
     score -= ((2 * weakCount) / total) * 40; // up to -40 for all weak
     score -= ((2 * breachedCount) / total) * 40; // up to -40 for all breached
@@ -65,8 +56,6 @@ class DashboardService {
     final int finalScore = score.round().clamp(0, 100);
 
     // ── Build action items 
-    // Only add messages for problems that actually exist.
-    // Ordered by severity: breached first (most urgent), then weak, then reused.
     final List<String> actionItems = [];
 
     if (breachedCount > 0) {

@@ -11,6 +11,10 @@ import 'screens/add_password_screen.dart';
 import 'screens/generator_screeen.dart';
 import 'screens/breach_check_screen.dart';
 import 'screens/dashboard_screen.dart';
+import 'screens/settings_screen.dart';
+import 'screens/main_scaffold.dart';
+import 'screens/password_detail_screen.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // must be first line
   await Firebase.initializeApp(
@@ -47,11 +51,14 @@ class MyApp extends StatelessWidget {
         '/splash': (ctx) => const SplashScreen(),
         '/login': (ctx) => const LoginScreen(),
         '/signup': (ctx) => const SignupScreen(),
+        '/scaffold': (ctx) => const MainScaffold(),
         '/home': (ctx) => const HomeScreen(),
         '/add': (ctx) => const AddPasswordScreen(),
         '/generator': (ctx) => const GeneratorScreen(),
         '/breach': (ctx) => const BreachCheckScreen(),
         '/dashboard': (ctx) => const DashboardScreen(),
+        '/settings': (ctx) => const SettingsScreen(),
+        '/detail': (ctx) => const PasswordDetailScreen(),
       },
     );
   }

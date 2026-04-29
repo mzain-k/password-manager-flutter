@@ -27,7 +27,6 @@ class SecurityStats {
     return 'Critical';
   }
 
-  // Returns the display colour for the score ring and label
   Color get scoreColor {
     if (score >= 80) return const Color(0xFF2E7D32); 
     if (score >= 60) return const Color(0xFF388E3C); 

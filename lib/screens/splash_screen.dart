@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       // Already logged in — go straight to vault
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/scaffold');
     } else {
       // Not logged in — show login screen
       Navigator.pushReplacementNamed(context, '/login');
