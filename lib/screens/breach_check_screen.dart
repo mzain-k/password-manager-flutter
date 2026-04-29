@@ -49,104 +49,107 @@ class _BreachCheckScreenState extends State<BreachCheckScreen> {
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(), // dismiss keyboard on tap outside
+          child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
 
-            // ── Explanation card 
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: const Color(0xFFE8F4FD),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFBBDEFB)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Row(
-                    children: [
-                      Icon(Icons.shield_outlined,
-                        color: Color(0xFF1565C0), size: 20),
-                      SizedBox(width: 8),
-                      Text('How this works',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF1565C0))),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Your password is never sent to any server. '
-                    'Only the first 5 characters of a one-way hash '
-                    'are sent. This protects your privacy completely.',
-                    style: TextStyle(
-                      fontSize: 12, color: Color(0xFF1565C0)),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // ── Password input field 
-            TextFormField(
-              controller: _passCtrl,
-              obscureText: !_showPassword,
-              decoration: InputDecoration(
-                labelText: 'Enter password to check',
-                prefixIcon: const Icon(
-                  Icons.lock_outline, color: Color(0xFF1E3A5F)),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10)),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(
-                    color: Color(0xFF1E3A5F), width: 2)),
-                filled: true,
-                fillColor: Colors.white,
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _showPassword
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                    color: Colors.grey),
-                  onPressed: () => setState(
-                    () => _showPassword = !_showPassword),
+              // ── Explanation card 
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE8F4FD),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFFBBDEFB)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.shield_outlined,
+                          color: Color(0xFF1565C0), size: 20),
+                        SizedBox(width: 8),
+                        Text('How this works',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1565C0))),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Your password is never sent to any server. '
+                      'Only the first 5 characters of a one-way hash '
+                      'are sent. This protects your privacy completely.',
+                      style: TextStyle(
+                        fontSize: 12, color: Color(0xFF1565C0)),
+                    ),
+                  ],
                 ),
               ),
-              onFieldSubmitted: (_) => _checkBreach(),
-            ),
-            const SizedBox(height: 16),
+              const SizedBox(height: 20),
 
-            // ── Check button 
-            ElevatedButton.icon(
-              onPressed: _isLoading ? null : _checkBreach,
-              icon: _isLoading
-                ? const SizedBox(
-                    width: 18, height: 18,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2, color: Colors.white))
-                : const Icon(Icons.search),
-              label: Text(
-                _isLoading ? 'Checking...' : 'Check for Breaches'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF1E3A5F),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
+              // ── Password input field 
+              TextFormField(
+                controller: _passCtrl,
+                obscureText: !_showPassword,
+                decoration: InputDecoration(
+                  labelText: 'Enter password to check',
+                  prefixIcon: const Icon(
+                    Icons.lock_outline, color: Color(0xFF1E3A5F)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF1E3A5F), width: 2)),
+                  filled: true,
+                  fillColor: Colors.white,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _showPassword
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      color: Colors.grey),
+                    onPressed: () => setState(
+                      () => _showPassword = !_showPassword),
+                  ),
+                ),
+                onFieldSubmitted: (_) => _checkBreach(),
               ),
-            ),
-            const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
-            // ── Result display 
-            // Only shown after a check has been run
-            if (_result != null) _buildResultCard(_result!),
-          ],
+              // ── Check button 
+              ElevatedButton.icon(
+                onPressed: _isLoading ? null : _checkBreach,
+                icon: _isLoading
+                  ? const SizedBox(
+                      width: 18, height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2, color: Colors.white))
+                  : const Icon(Icons.search),
+                label: Text(
+                  _isLoading ? 'Checking...' : 'Check for Breaches'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF1E3A5F),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // ── Result display 
+              // Only shown after a check has been run
+              if (_result != null) _buildResultCard(_result!),
+            ],
+          ),
         ),
-      ),
+      )
     );
   }
 

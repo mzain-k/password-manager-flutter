@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/password_entry.dart';
+import 'package:flutter/services.dart';
 
 class FirestoreService {
 
@@ -55,6 +56,7 @@ class FirestoreService {
   // ─── DELETE: Remove a password entry permanently
   static Future<void> deletePassword(String id) async {
     try {
+      await HapticFeedback.mediumImpact();
       await _passwordsRef.doc(id).delete();
     } catch (e) {
       throw Exception('Failed to delete password: $e');

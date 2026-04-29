@@ -155,6 +155,7 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Add Password'),
@@ -162,225 +163,228 @@ class _AddPasswordScreenState extends State<AddPasswordScreen> {
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
 
-              // ── Site Name 
-              TextFormField(
-                controller: _siteCtrl,
-                textCapitalization: TextCapitalization.words,
-                decoration: _inputDeco(
-                  'Site / App Name', Icons.language,
-                  hint: 'e.g. Google, Facebook'),
-                validator: (v) {
-                  if (v == null || v.trim().isEmpty){
-                    return 'Site name is required';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // ── URL (optional) 
-              TextFormField(
-                controller: _urlCtrl,
-                keyboardType: TextInputType.url,
-                decoration: _inputDeco(
-                  'Website URL (optional)', Icons.link,
-                  hint: 'e.g. https://google.com'),
-              ),
-              const SizedBox(height: 16),
-
-              // ── Username / Email 
-              TextFormField(
-                controller: _userCtrl,
-                keyboardType: TextInputType.emailAddress,
-                decoration: _inputDeco(
-                  'Username or Email', Icons.person_outline,
-                  hint: 'e.g. zain@gmail.com'),
-                validator: (v) {
-                  if (v == null || v.trim().isEmpty){
-                    return 'Username or email is required';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // ── Password field with show/hide toggle 
-              TextFormField(
-                controller: _passCtrl,
-                obscureText: !_showPassword,
-                onChanged: (val) => setState(() => _currentPassword = val),
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  prefixIcon: const Icon(
-                    Icons.lock_outline, color: Color(0xFF1E3A5F)),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _showPassword
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () =>
-                        setState(() => _showPassword = !_showPassword),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(
-                      color: Color(0xFF1E3A5F), width: 2)),
-                  filled: true,
-                  fillColor: Colors.grey.shade50,
+                // ── Site Name 
+                TextFormField(
+                  controller: _siteCtrl,
+                  textCapitalization: TextCapitalization.words,
+                  decoration: _inputDeco(
+                    'Site / App Name', Icons.language,
+                    hint: 'e.g. Google, Facebook'),
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty){
+                      return 'Site name is required';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (v) {
-                  if (v == null || v.isEmpty) {
-                    return 'Password is required';
-                  }
-                  if (v.length < 4) {
-                    return 'Password must be at least 4 characters';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 12),
+                const SizedBox(height: 16),
 
-              StrengthMeter(password: _currentPassword),
-
-              const SizedBox(height: 12),
-
-              // The check button — shows spinner while checking
-              OutlinedButton.icon(
-                onPressed: _isCheckingBreach ? null : _checkBreach,
-                icon: _isCheckingBreach
-                  ? const SizedBox(
-                      width: 16, height: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2))
-                  : const Icon(Icons.security_outlined, size: 18),
-                label: Text(_isCheckingBreach
-                  ? 'Checking...'
-                  : 'Check for Data Breaches'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xFF1E3A5F),
-                  side: const BorderSide(color: Color(0xFF1E3A5F)),
+                // ── URL (optional) 
+                TextFormField(
+                  controller: _urlCtrl,
+                  keyboardType: TextInputType.url,
+                  decoration: _inputDeco(
+                    'Website URL (optional)', Icons.link,
+                    hint: 'e.g. https://google.com'),
                 ),
-              ),
+                const SizedBox(height: 16),
 
-              // Result — shown only after a check
-              if (_breachResult != null) ...[
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: _breachResult!.isBreached
-                        ? const Color(0xFFFDEDEC)
-                        : const Color(0xFFEAF5EA),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: _breachResult!.isBreached
-                          ? const Color(0xFFF1948A)
-                          : const Color(0xFF81C784)),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        _breachResult!.isBreached
-                            ? Icons.warning_amber_rounded
-                            : Icons.check_circle_outline,
-                        color: _breachResult!.isBreached
-                            ? const Color(0xFFC0392B)
-                            : const Color(0xFF2E7D32),
-                        size: 20,
+                // ── Username / Email 
+                TextFormField(
+                  controller: _userCtrl,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: _inputDeco(
+                    'Username or Email', Icons.person_outline,
+                    hint: 'e.g. zain@gmail.com'),
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty){
+                      return 'Username or email is required';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // ── Password field with show/hide toggle 
+                TextFormField(
+                  controller: _passCtrl,
+                  obscureText: !_showPassword,
+                  onChanged: (val) => setState(() => _currentPassword = val),
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    prefixIcon: const Icon(
+                      Icons.lock_outline, color: Color(0xFF1E3A5F)),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _showPassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        color: Colors.grey,
                       ),
-                      const SizedBox(width: 8),
+                      onPressed: () =>
+                          setState(() => _showPassword = !_showPassword),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF1E3A5F), width: 2)),
+                    filled: true,
+                    fillColor: Colors.grey.shade50,
+                  ),
+                  validator: (v) {
+                    if (v == null || v.isEmpty) {
+                      return 'Password is required';
+                    }
+                    if (v.length < 4) {
+                      return 'Password must be at least 4 characters';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 12),
+
+                StrengthMeter(password: _currentPassword),
+
+                const SizedBox(height: 12),
+
+                // The check button — shows spinner while checking
+                OutlinedButton.icon(
+                  onPressed: _isCheckingBreach ? null : _checkBreach,
+                  icon: _isCheckingBreach
+                    ? const SizedBox(
+                        width: 16, height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Icon(Icons.security_outlined, size: 18),
+                  label: Text(_isCheckingBreach
+                    ? 'Checking...'
+                    : 'Check for Data Breaches'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xFF1E3A5F),
+                    side: const BorderSide(color: Color(0xFF1E3A5F)),
+                  ),
+                ),
+
+                // Result — shown only after a check
+                if (_breachResult != null) ...[
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: _breachResult!.isBreached
+                          ? const Color(0xFFFDEDEC)
+                          : const Color(0xFFEAF5EA),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: _breachResult!.isBreached
+                            ? const Color(0xFFF1948A)
+                            : const Color(0xFF81C784)),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          _breachResult!.isBreached
+                              ? Icons.warning_amber_rounded
+                              : Icons.check_circle_outline,
+                          color: _breachResult!.isBreached
+                              ? const Color(0xFFC0392B)
+                              : const Color(0xFF2E7D32),
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            _breachResult!.message,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: _breachResult!.isBreached
+                                  ? const Color(0xFF922B21)
+                                  : const Color(0xFF1B5E20),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+
+                const SizedBox(height: 16),
+
+                // ── Category dropdown 
+                DropdownButtonFormField<String>(
+                  initialValue: _category,
+                  decoration: _inputDeco('Category', Icons.folder_outlined),
+                  items: _categories.map((cat) {
+                    return DropdownMenuItem(
+                      value: cat,
+                      child: Text(cat),
+                    );
+                  }).toList(),
+                  onChanged: (val) {
+                    if (val != null) setState(() => _category = val);
+                  },
+                ),
+                const SizedBox(height: 8),
+
+                // ── Encryption notice 
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE8F4FD),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.shield_outlined,
+                        size: 16, color: Color(0xFF1565C0)),
+                      SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          _breachResult!.message,
+                          'Your password will be AES-256 encrypted before saving.',
                           style: TextStyle(
-                            fontSize: 12,
-                            color: _breachResult!.isBreached
-                                ? const Color(0xFF922B21)
-                                : const Color(0xFF1B5E20),
-                          ),
+                            fontSize: 12, color: Color(0xFF1565C0)),
                         ),
                       ),
                     ],
                   ),
                 ),
+                const SizedBox(height: 24),
+
+                // ── Save button 
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _handleSave,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1E3A5F),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: _isLoading
+                      ? const SizedBox(
+                          width: 22, height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2, color: Colors.white))
+                      : const Text('Save Password',
+                          style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600)),
+                ),
               ],
-
-              const SizedBox(height: 16),
-
-              // ── Category dropdown 
-              DropdownButtonFormField<String>(
-                initialValue: _category,
-                decoration: _inputDeco('Category', Icons.folder_outlined),
-                items: _categories.map((cat) {
-                  return DropdownMenuItem(
-                    value: cat,
-                    child: Text(cat),
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  if (val != null) setState(() => _category = val);
-                },
-              ),
-              const SizedBox(height: 8),
-
-              // ── Encryption notice 
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE8F4FD),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.shield_outlined,
-                      size: 16, color: Color(0xFF1565C0)),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Your password will be AES-256 encrypted before saving.',
-                        style: TextStyle(
-                          fontSize: 12, color: Color(0xFF1565C0)),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // ── Save button 
-              ElevatedButton(
-                onPressed: _isLoading ? null : _handleSave,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1E3A5F),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                ),
-                child: _isLoading
-                    ? const SizedBox(
-                        width: 22, height: 22,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2, color: Colors.white))
-                    : const Text('Save Password',
-                        style: TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w600)),
-              ),
-            ],
+            ),
           ),
         ),
-      ),
+      )
     );
   }
 }
