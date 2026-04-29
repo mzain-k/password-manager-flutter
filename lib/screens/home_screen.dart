@@ -60,11 +60,11 @@ class _HomeScreenState extends State<HomeScreen> {
               decoration: InputDecoration(
                 hintText: 'Search by site, username, or category...',
                 hintStyle: TextStyle(
-                  color: Colors.white.withOpacity(0.6), fontSize: 14),
+                  color: Colors.white.withValues(alpha: 0.6), fontSize: 14),
                 prefixIcon: Icon(
-                  Icons.search, color: Colors.white.withOpacity(0.7)),
+                  Icons.search, color: Colors.white.withValues(alpha: 0.7)),
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.15),
+                fillColor: Colors.white.withValues(alpha: 0.15),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide.none,

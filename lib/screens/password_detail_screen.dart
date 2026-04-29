@@ -135,7 +135,7 @@ class _PasswordDetailScreenState extends State<PasswordDetailScreen> {
                   CircleAvatar(
                     radius: 28,
                     backgroundColor:
-                        Colors.white.withOpacity(0.2),
+                        Colors.white.withValues(alpha: 0.2),
                     child: Text(
                       entry.siteName[0].toUpperCase(),
                       style: const TextStyle(
@@ -158,7 +158,7 @@ class _PasswordDetailScreenState extends State<PasswordDetailScreen> {
                         if (entry.siteUrl.isNotEmpty)
                           Text(entry.siteUrl,
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.7),
+                              color: Colors.white.withValues(alpha: 0.7),
                               fontSize: 12)),
                       ],
                     ),
@@ -292,7 +292,7 @@ class _PasswordDetailScreenState extends State<PasswordDetailScreen> {
                                 horizontal: 10,
                                 vertical: 5),
                         decoration: BoxDecoration(
-                          color: _strengthColor(entry.strength).withOpacity(0.1),
+                          color: _strengthColor(entry.strength).withValues(alpha: 0.1),
                           borderRadius:
                               BorderRadius.circular(20),
                           border: Border.all(

@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Container(
               width: 90, height: 90,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.15),
+                color: Colors.white.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: const Icon(Icons.shield_rounded,
@@ -52,13 +52,13 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 8),
             Text('Secure Password Manager',
               style: TextStyle(fontSize: 14,
-                color: Colors.white.withOpacity(0.7))),
+                color: Colors.white.withValues(alpha: 0.7))),
             const SizedBox(height: 48),
             SizedBox(
               width: 24, height: 24,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                color: Colors.white.withOpacity(0.6),
+                color: Colors.white.withValues(alpha: 0.6),
               ),
             ),
           ],
